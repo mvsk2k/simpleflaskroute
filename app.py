@@ -14,8 +14,8 @@ def about():
 
 
 if __name__ == '__main__':
-    # Run the Flask app
-    app.run(host='0.0.0.0', port=5000)
+    # Run the Flask app, to run in cloud run the port to be 8080
+    app.run(host='0.0.0.0', port=8080)
 
 
 """

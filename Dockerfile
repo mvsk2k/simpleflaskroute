@@ -16,8 +16,8 @@ COPY app.py .
 # Copy the templates folder to the container
 COPY templates ./templates
 
-# Expose port 5000 for the Flask app
-EXPOSE 5000
+# Expose port 5000 for the Flask app, to run in cloud run the port to be 8080
+EXPOSE 8080
 
 # Set the entry point to run the Flask app
 CMD ["python", "app.py"]
