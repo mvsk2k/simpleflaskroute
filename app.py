@@ -3,14 +3,17 @@ import base64
 
 app = Flask(__name__)
 
+decoded_message = "Hi all"
+
 @app.route('/')
 def home():
-    decoded_message = "Think well and remember"
+    global decoded_message
+    #decoded_message = "Think well and remember"
     return render_template('message.html', message=decoded_message)
 
 @app.route('/about')
 def about():
-    return render_template('message.html', message="This is about")
+    return render_template('message.html', message=decoded_message)
 
 
 if __name__ == '__main__':
