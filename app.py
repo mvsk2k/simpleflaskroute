@@ -1,41 +1,46 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, redirect, url_for, jsonify, render_template
 import base64
 
 app = Flask(__name__)
 
 decoded_message = "Hi all"
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET','POST'])
 def home():
     global decoded_message
 
-    try:
-        # Extract the Pub/Sub message
-        envelope = request.get_json()
+    if request.method == 'POST':
+        try:
+            # Extract the Pub/Sub message
+            envelope = request.get_json()
 
-        if not envelope:
-            return "Bad Request: No JSON body received", 400
+            if not envelope:
+                return "Bad Request: No JSON body received", 400
 
-        # Verify the message format
-        if "message" not in envelope:
-            return "Bad Request: No message field in JSON", 400
+            # Verify the message format
+            if "message" not in envelope:
+                return "Bad Request: No message field in JSON", 400
 
-        pubsub_message = envelope["message"]
+            pubsub_message = envelope["message"]
 
-        # Decode the message data (base64 encoded by Pub/Sub)
-        if "data" in pubsub_message:
-            message_data = pubsub_message["data"]
-            decoded_message = base64.b64decode(message_data).decode("utf-8")
+            # Decode the message data (base64 encoded by Pub/Sub)
+            if "data" in pubsub_message:
+                message_data = pubsub_message["data"]
+                decoded_message = base64.b64decode(message_data).decode("utf-8")
 
-        # Acknowledge the message by returning a 200 status code
-        return "Message received and processed.", 200
+            # Acknowledge the message by returning a 200 status code
+            return "Message received and processed.", 200
 
-        # Render the HTML template with the message and attributes
-        #return render_template('message.html', message=decoded_message), 200
+            # Render the HTML template with the message and attributes
+            #return render_template('message.html', message=decoded_message), 200
 
-    except Exception as e:
-        print(f"Error processing the message: {e}")
-        return "Internal Server Error", 500
+        except Exception as e:
+            print(f"Error processing the message: {e}")
+            return "Internal Server Error", 500
+
+    else:
+        #return redirect(url_for('/about'))
+        return redirect('/about')
 
     #decoded_message = "Think well and remember"
     #return render_template('message.html', message=decoded_message)
